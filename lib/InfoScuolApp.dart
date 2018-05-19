@@ -12,6 +12,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:info_scuol_app/util/Network.dart';
 import 'package:info_scuol_app/model/RequestEnvelop.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 
@@ -28,6 +29,7 @@ class InfoScuolApp extends StatefulWidget {
 
 
 class _InfoScuolAppState extends State<InfoScuolApp> {
+  FirebaseMessaging _firebaseMessaging=new FirebaseMessaging();
   // This widget is the root of your application.
   String title = "titolo";
   LoginNew _loginStack;
@@ -51,10 +53,41 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
     return version;
   }
 
-
+  String _homeScreenText="";
+  String googleToken="";
   @override
   initState() {
     super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print("onMessage: $message");
+        //_showItemDialog(message);
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print("onLaunch: $message");
+        //_navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) {
+        print("onResume: $message");
+        //_navigateToItemDetail(message);
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      setState(() {
+        _homeScreenText = "Push Messaging token: $token";
+
+      });
+      print(_homeScreenText);
+    });
+
+
     /*debugPrint("loginNewKeyState :$loginNewKeyState");
     debugPrint("registrationKeyState :$registrationKeyState");
     debugPrint("registrationInitialKeyState :$registrationInitialKeyState");*/
@@ -137,7 +170,10 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
         onLoggedIn: () {
           _onLoggeIn();
         },
-        onChangedUser: _onChangedUser);
+        onChangedUser: _onChangedUser,
+        googleDeviceToken: googleToken,
+        ituneDeviceToken: googleToken
+    );
 
     /*_registrationStack = new Registration(
         key: registrationKeyState,

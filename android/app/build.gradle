@@ -36,8 +36,8 @@ android {
         applicationId "com.bajeli.infoscuolapp"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 11
-        versionName "Alfa 1.1"
+        versionCode 12
+        versionName "Alfa 1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -80,4 +80,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //implementation 'com.google.firebase:firebase-core:15.0.2'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

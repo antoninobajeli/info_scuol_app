@@ -33,7 +33,7 @@ class IsaTutenze extends Object with _$IsaTutenzeSerializerMixin {
    bool gen_leader=false;
    bool gen_logged=false;
    String gen_login_tkn;
-
+   String gen_push_token_gl;
 
    IsaTutenze();
 

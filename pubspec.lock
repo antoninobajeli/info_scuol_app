@@ -42,21 +42,21 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.5"
+    version: "0.12.6"
   build_config:
     dependency: transitive
     description:
       name: build_config
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.6+1"
+    version: "0.2.6+2"
   build_resolvers:
     dependency: transitive
     description:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0+1"
+    version: "0.2.0+2"
   build_runner:
     dependency: "direct dev"
     description:
@@ -77,7 +77,7 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.3"
+    version: "5.4.4"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -155,6 +155,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   fixnum:
     dependency: transitive
     description:
@@ -184,15 +191,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_plugin_app_version:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: c2675835294f88afb0a2221957fe282d4ea60986
-      url: "https://github.com/antoninobajeli/flutter_plugin_app_version.git"
-    source: git
-    version: "0.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -205,15 +203,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0-alpha.9"
-  get_version:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: fa61f905670c6e787c0a3402b4d1a357a391bd3d
-      url: "https://github.com/AppleEducate/get_version.git"
-    source: git
-    version: "0.0.1"
   glob:
     dependency: transitive
     description:
@@ -360,7 +349,7 @@ packages:
       name: numberpicker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.2"
   package_config:
     dependency: transitive
     description:
@@ -389,6 +378,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.1"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   plugin:
     dependency: transitive
     description:
@@ -591,5 +587,5 @@ packages:
     source: hosted
     version: "2.1.13"
 sdks:
-  dart: ">=2.0.0-dev.32 <=2.0.0-edge.c080951d45e79cd25df98036c4be835b284a269c"
-  flutter: ">=0.3.1 <0.4.0"
+  dart: ">=2.0.0-dev.32 <=2.0.0-edge.3c4dccbd46f152be9e1b6ca95c57357e8e48057c"
+  flutter: ">=0.1.4 <2.0.0"

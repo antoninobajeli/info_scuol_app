@@ -14,10 +14,14 @@ class LoginNew extends StatefulWidget{
     Key key,
     @required this.onLoggedIn,
     @required this.onChangedUser,
+    @required this.googleDeviceToken,
+    @required this.ituneDeviceToken
   }) : super(key: key);
 
   final VoidCallback onLoggedIn;
   final ValueChanged<ResponseEnvelop> onChangedUser;
+  final String googleDeviceToken;
+  final String ituneDeviceToken;
 
   @override
   _LoginNewState createState() => new _LoginNewState(onLoggedInState:(){onLoggedIn();});
@@ -34,7 +38,6 @@ class _LoginNewState extends State<LoginNew> {
   IsaTutenze getIsaTutenze(){
     return _user;
   }
-
 
   final GlobalKey pscaffoldKey;
   final VoidCallback onLoggedInState;
@@ -91,6 +94,7 @@ class _LoginNewState extends State<LoginNew> {
     IsaTutenze userToLogin = new IsaTutenze();
     userToLogin.gen_email = _email;
     userToLogin.gen_pwd = _password;
+    userToLogin.gen_push_token_gl=widget.googleDeviceToken;
 
     RequestEnvelop envelop = new RequestEnvelop();
     envelop.userToLogin = userToLogin;
