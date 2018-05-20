@@ -25,11 +25,13 @@ import 'package:info_scuol_app/model/Scuola.dart';
 import 'package:info_scuol_app/AddClasseDialog.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key, this.verifyToken, this.title, this.user, this.figli})
+  MainPage({Key key, this.verifyToken,this.devicePushTokenGl,this.devicePushTokenItune, this.title, this.user, this.figli})
       : super(key: key);
   static const String routeName = "/MainPage";
   final String title;
   final String verifyToken;
+  final String devicePushTokenGl;
+  final String devicePushTokenItune;
   final IsaTutenze user;
   final List<Figlio> figli;
 
@@ -61,7 +63,7 @@ class _MainPageState extends State<MainPage> {
   WorkingMode currentRole = WorkingMode.genitore;
   String _appVersion = 'Unknown';
   String _appVersion2 = 'Unknown';
-  String _platformVersion='Unknown';
+  String _platformVersion='Unknown ';
 
 
   static MethodChannel  channel_version= const MethodChannel("getVersionChannel");
@@ -106,10 +108,39 @@ class _MainPageState extends State<MainPage> {
 
 
 
+  void _updatePushNotificationToken({String genPushTokenGl: "", String genPushTokenItune: ""}) async {
+    IsaTutenze userToLogin = new IsaTutenze();
+    userToLogin.gen_id=_user.gen_id;
+    userToLogin.gen_push_token_gl= genPushTokenGl;
+    userToLogin.gen_push_token_itune= genPushTokenItune;
+
+    RequestEnvelop envelop = new RequestEnvelop();
+    envelop.userToLogin = userToLogin;
+    String reqData = json.encode(envelop.toJson());
+
+    Network n = new Network();
+    var resultData = await n.getDataTask(reqData,'updatePushToken');
+    if (!mounted) return;
+
+    setState(() {
+      try {
+        ResponseEnvelop i = new ResponseEnvelop.fromJson(json.decode(resultData));
+
+        print("UpdatePushNotificatioToken:" + resultData);
+      }catch (e) {
+        debugPrint(e.toString());
+      }
+    });
+  }
+
+
+
   _performRegistrationConfirm() async {
     debugPrint("  verifyToken = ${widget.verifyToken}");
     IsaTutenze userToLogin = new IsaTutenze();
     userToLogin.gen_login_tkn = widget.verifyToken;
+    userToLogin.gen_push_token_gl = widget.devicePushTokenGl;
+    userToLogin.gen_push_token_itune = widget.devicePushTokenItune;
 
     RequestEnvelop envelop = new RequestEnvelop();
     envelop.userToLogin = userToLogin;
@@ -125,6 +156,8 @@ class _MainPageState extends State<MainPage> {
       _figli = i.figli;
       _scuole = i.scuole;
 
+
+      _updatePushNotificationToken(genPushTokenGl:widget.devicePushTokenGl,genPushTokenItune:widget.devicePushTokenGl);
       //Navigator.pushNamed(context,"/");
       //_onChangedUser(i);
     });
@@ -191,6 +224,7 @@ class _MainPageState extends State<MainPage> {
       if ((_scuole!=null )&& (_scuole.length>0)){
         currentRole = WorkingMode.dirigente;
       }
+
 
       debugPrint("_MainPageState >> ${_user.gen_email}");
 
@@ -285,7 +319,7 @@ class _MainPageState extends State<MainPage> {
                                 istituto: _scuole.elementAt(0).istituto,
                               )));
                     },
-                  ):null,
+                  ):new ListTile(),
 
 
 

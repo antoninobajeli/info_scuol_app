@@ -10,7 +10,7 @@ import 'package:info_scuol_app/model/IsaTutenze.dart';
 
 
 class LoginNew extends StatefulWidget{
-  const LoginNew ({
+   LoginNew ({
     Key key,
     @required this.onLoggedIn,
     @required this.onChangedUser,
@@ -20,7 +20,7 @@ class LoginNew extends StatefulWidget{
 
   final VoidCallback onLoggedIn;
   final ValueChanged<ResponseEnvelop> onChangedUser;
-  final String googleDeviceToken;
+   String googleDeviceToken;
   final String ituneDeviceToken;
 
   @override
@@ -94,7 +94,8 @@ class _LoginNewState extends State<LoginNew> {
     IsaTutenze userToLogin = new IsaTutenze();
     userToLogin.gen_email = _email;
     userToLogin.gen_pwd = _password;
-    userToLogin.gen_push_token_gl=widget.googleDeviceToken;
+    //userToLogin.gen_push_token_gl=widget.googleDeviceToken;
+    //userToLogin.gen_push_token_itune=widget.googleDeviceToken;
 
     RequestEnvelop envelop = new RequestEnvelop();
     envelop.userToLogin = userToLogin;

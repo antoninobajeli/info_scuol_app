@@ -18,7 +18,9 @@ IsaTutenze _$IsaTutenzeFromJson(Map<String, dynamic> json) => new IsaTutenze()
   ..gen_padre = json['gen_padre'] as bool
   ..gen_leader = json['gen_leader'] as bool
   ..gen_logged = json['gen_logged'] as bool
-  ..gen_login_tkn = json['gen_login_tkn'] as String;
+  ..gen_login_tkn = json['gen_login_tkn'] as String
+  ..gen_push_token_gl = json['gen_push_token_gl'] as String
+  ..gen_push_token_itune = json['gen_push_token_itune'] as String;
 
 abstract class _$IsaTutenzeSerializerMixin {
   int get gen_id;
@@ -33,6 +35,8 @@ abstract class _$IsaTutenzeSerializerMixin {
   bool get gen_leader;
   bool get gen_logged;
   String get gen_login_tkn;
+  String get gen_push_token_gl;
+  String get gen_push_token_itune;
   Map<String, dynamic> toJson() => <String, dynamic>{
         'gen_id': gen_id,
         'gen_scu': gen_scu,
@@ -45,6 +49,8 @@ abstract class _$IsaTutenzeSerializerMixin {
         'gen_padre': gen_padre,
         'gen_leader': gen_leader,
         'gen_logged': gen_logged,
-        'gen_login_tkn': gen_login_tkn
+        'gen_login_tkn': gen_login_tkn,
+        'gen_push_token_gl': gen_push_token_gl,
+        'gen_push_token_itune': gen_push_token_itune
       };
 }

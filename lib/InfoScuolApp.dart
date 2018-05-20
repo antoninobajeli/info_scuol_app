@@ -42,19 +42,48 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
   Widget _mainPage;
   String _verifyToken;
 
+
+
+  _InfoScuolAppState() {
+    debugPrint("InfoScuolAppState >> _InfoScuolAppState");
+    //_loginOldPage=  new MyHomePage( title: 'Login page' );
+    _loginStack = new LoginNew(
+        key: loginNewKeyState,
+        onLoggedIn: () {
+          _onLoggeIn();
+        },
+        onChangedUser: _onChangedUser,
+        googleDeviceToken: _devicePushTokenGl,
+        ituneDeviceToken: _devicePushTokenGl
+    );
+
+    /*_registrationStack = new Registration(
+        key: registrationKeyState,
+        onChangedUser: _onChangedUser
+    );*/
+
+
+    _screen = _loginStack;
+
+  }
+
+
   // infoscuolapp://com.bajeli.infoscuolapp/registration
   final MethodChannel channel = const MethodChannel("deeplink.channel/registration");
-
-
-
   static MethodChannel  channel2= const MethodChannel("get_version");
+
+
+
+
   static Future<String> get appVersionNameFuture async {
     final String version = await channel2.invokeMethod('getAppVersionName');
     return version;
   }
 
   String _homeScreenText="";
-  String googleToken="";
+  String _devicePushTokenGl="";
+  String _devicePushTokenItune="";
+
   @override
   initState() {
     super.initState();
@@ -78,10 +107,24 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
+
+
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       setState(() {
+        _devicePushTokenGl=token;
         _homeScreenText = "Push Messaging token: $token";
+
+        //_loginStack.googleDeviceToken=_devicePushTokenGl;
+        /*_loginStack = new LoginNew(
+            key: loginNewKeyState,
+            onLoggedIn: () {
+              _onLoggeIn();
+            },
+            onChangedUser: _onChangedUser,
+            googleDeviceToken: googleToken,
+            ituneDeviceToken: googleToken
+        );*/
 
       });
       print(_homeScreenText);
@@ -125,11 +168,14 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
 
         setState(() {
           debugPrint("Pushing Registration >> _verifyToken = ${_verifyToken}");
+          
 
           _mainPage =
           new MainPage(
             title: "Pannello di controllo deep method",
             verifyToken:_verifyToken,
+            devicePushTokenGl:_devicePushTokenGl,
+            devicePushTokenItune:_devicePushTokenItune,
             user: null,
             figli: null,
           );
@@ -162,30 +208,9 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
   }
 
 
-  _InfoScuolAppState() {
-    debugPrint("InfoScuolAppState >> _InfoScuolAppState");
-    //_loginOldPage=  new MyHomePage( title: 'Login page' );
-    _loginStack = new LoginNew(
-        key: loginNewKeyState,
-        onLoggedIn: () {
-          _onLoggeIn();
-        },
-        onChangedUser: _onChangedUser,
-        googleDeviceToken: googleToken,
-        ituneDeviceToken: googleToken
-    );
-
-    /*_registrationStack = new Registration(
-        key: registrationKeyState,
-        onChangedUser: _onChangedUser
-    );*/
 
 
-    _screen = _loginStack;
-
-  }
-
-
+  /*
   _performRegistrationConfirm() async {
     debugPrint("  verifyToken = $_verifyToken");
     IsaTutenze userToLogin = new IsaTutenze();
@@ -206,7 +231,7 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
       //_onChangedUser(i);
     });
   }
-
+*/
 
 
 
@@ -220,6 +245,8 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
       _responseEnvelop = response;
       _user = _responseEnvelop.user;
       if ((_user != null) && (_user.gen_id > 0)) {
+
+        _updatePushNotificationToken(genPushTokenGl:_devicePushTokenGl,genPushTokenItune:_devicePushTokenItune);
         _mainPage = new MainPage(
           title: "Pannello di controllo",
           user: _user,
@@ -237,6 +264,33 @@ class _InfoScuolAppState extends State<InfoScuolApp> {
         new MaterialPageRoute( builder: (_context) => _screen)
     );*/
   }
+
+
+  void _updatePushNotificationToken({String genPushTokenGl: "", String genPushTokenItune: ""}) async {
+    IsaTutenze userToLogin = new IsaTutenze();
+    userToLogin.gen_id=_user.gen_id;
+    userToLogin.gen_push_token_gl= genPushTokenGl;
+    userToLogin.gen_push_token_itune= genPushTokenItune;
+
+    RequestEnvelop envelop = new RequestEnvelop();
+    envelop.userToLogin = userToLogin;
+    String reqData = json.encode(envelop.toJson());
+
+    Network n = new Network();
+    var resultData = await n.getDataTask(reqData,'updatePushToken');
+    if (!mounted) return;
+
+    setState(() {
+      try {
+        ResponseEnvelop i = new ResponseEnvelop.fromJson(json.decode(resultData));
+
+        print("UpdatePushNotificatioToken:" + resultData);
+      }catch (e) {
+        debugPrint(e.toString());
+      }
+    });
+  }
+
 
   // OBSOLETO, sotituito da _onChangedUser
   // questo metodo viene chiamato dalla classe login per indicare che
